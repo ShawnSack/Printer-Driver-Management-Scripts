@@ -59,7 +59,8 @@ if ($Logging) {
 
 try {
     # Add the printer driver
-    pnputil.exe /add-driver $DriverPath /install
+    Start-Process -FilePath "pnputil.exe" -ArgumentList "/add-driver $DriverPath /install" -Wait -WorkingDirectory $PSScriptRoot
+    #pnputil.exe /add-driver $DriverPath /install
     if ($LASTEXITCODE -ne 0) {
         Write-Output "Error: Failed to add printer driver."
         exit 1
