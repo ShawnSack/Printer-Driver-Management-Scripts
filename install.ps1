@@ -59,12 +59,13 @@ if ($Logging) {
 
 try {
     # Add the printer driver
-    Start-Process -FilePath "pnputil.exe" -ArgumentList "/add-driver $DriverPath /install" -Wait -WorkingDirectory $PSScriptRoot
-    #pnputil.exe /add-driver $DriverPath /install
-    if ($LASTEXITCODE -ne 0) {
+    # Add the printer driver
+    $process = Start-Process -FilePath "pnputil" -ArgumentList "/add-driver $DriverPath /install" -Wait -PassThru -RedirectStandardError stdout
+    if ($process.ExitCode -ne 0) {
         Write-Output "Error: Failed to add printer driver."
+        Write-Output $process.StandardError.ReadToEnd()
         exit 1
-    }
+}
 
     # Add the printer driver with PowerShell
     Add-PrinterDriver -Name $DriverName
